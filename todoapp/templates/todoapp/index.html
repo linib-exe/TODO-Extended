@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My TO-DO App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #17a2b8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #dee2e6;
+        }
+
+        .dropdown-menu {
+            background-color: #17a2b8;
+        }
+
+        .dropdown-item {
+            color: #fff;
+        }
+
+        .dropdown-item:hover {
+            background-color: #138496;
+        }
+
+        .form-control {
+            border-color: #17a2b8;
+            border-radius: 20px;
+        }
+
+        .btn-create {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-create:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-register {
+            background-color: #ffc107;
+            color: #212529;
+            border: none;
+        }
+
+        .btn-register:hover {
+            background-color: #ffad00;
+        }
+
+        .btn-login {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background-color: #218838;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .todo-list li {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .todo-list li a {
+            text-decoration: none;
+            color: #212529;
+        }
+
+        .todo-list li a:hover {
+            text-decoration: underline;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+
+        h6 {
+            color: #333; 
+            font-size: 18px; 
+            margin-top: 10px;
+        }
+        .not-logged-in-msg {
+            font-size: 16px;
+            color: #6c757d; /* or any other color you prefer */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand ms-5" href="#">My TO-DO App</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Categories
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">Work</a></li>
+                  <li><a class="dropdown-item" href="#">Personal</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Others</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search your task here.." aria-label="Search" > 
+              <!-- value="{{request.GET.search_query}} -->
+             
+              <button class="btn btn-outline-dark" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+        {% if request.user.is_authenticated %}
+            <h6>Hello, {{ user.username }}</h6>
+        {% endif %}
+    </nav>
+
+    <div class="container mt-5">
+        <a href="{% url 'create' %}" class="btn btn-create ms-2">Create</a>
+        <a href="{% url 'register' %}" class="btn btn-register ms-2">Register</a>
+        <a href="{% url 'login' %}" class="btn btn-login ms-2">Login</a>
+        <a href="{% url 'logout' %}" class="btn btn-logout ms-2">Logout</a>
+
+        {% if request.user.is_authenticated %}
+            <h1 class="mt-4">TODO LIST:</h1>
+            <ul class="todo-list">
+                {% for todo in todos %}
+                    <li>
+                        <p>{{ todo.id }}.</p> <input type="checkbox" name="" id="">   <a href="{% url 'details' todo.id %}">{{ todo.title }}</a>
+                        <!-- {% if todo.completed_status %}
+                            <a href="{% url 'details' todo.id %}" class="completed">{{ todo.title }}</a>
+                        {% else %}
+                            
+                        {% endif %} -->
+                        <a href="{% url 'update' todo.id %}" class="btn btn-secondary ms-2 text-light"><i class="fas fa-edit"></i> Update</a>
+                        <a href="" class="btn btn-danger ms-2 text-light"><i class="fa-solid fa-trash"></i> Delete</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+         <br> <br> <p class="not-logged-in-msg ms-1">Not logged in</p>
+        {% endif %}
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

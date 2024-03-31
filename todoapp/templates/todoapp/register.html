@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #17a2b8;
+            text-align: center;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #17a2b8;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h1>Register</h1>
+        <label for="firstname">Firstname:</label>
+        <input type="text" name="firstname" id="firstname">
+        <label for="lastname">Lastname:</label>
+        <input type="text" name="lastname" id="lastname">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email">
+        <label for="password1">Password:</label>
+        <input type="password" name="password" id="password">
+        <label for="password2">Confirm Password:</label>
+        <input type="password" name="cpassword" id="cpassword">
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>
