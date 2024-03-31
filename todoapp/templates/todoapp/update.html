@@ -61,6 +61,7 @@
             <label for="id_description">Description:</label>
             {{ form.description }}
         </div>
+        <input type="checkbox" name="completed_status" id="completed_status"> Completed Status  <br> <br>
         <a href="{% url 'update' todo.id %}"> <button type="submit">Update</button> </a>
     </form>
 </body>

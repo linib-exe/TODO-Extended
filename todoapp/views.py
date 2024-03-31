@@ -64,31 +64,42 @@ def logoutPage(request):
 
 @login_required(login_url='login')
 def update(request,id):
-    todo = Todo.objects.get(id=id)
-    if todo.user != request.user:
-        return redirect('home')
-    form = TodoForm(instance = todo)
-    if request.method == 'POST':
-        print(request.POST)
-        form = TodoForm(request.POST,instance=todo)
-        if form.is_valid():
-            form.save()
+    try:
+        todo = Todo.objects.get(id=id)
+        if todo.user != request.user:
             return redirect('home')
-    else:
-        form = TodoForm(instance=todo)
-    context = {
-        'todo': todo,
-        'form':form
-    }
-    return render(request,'todoapp/update.html',context)
+        form = TodoForm(instance = todo)
+        if request.method == 'POST':
+            print(request.POST)
+            form = TodoForm(request.POST,instance=todo)
+            if form.is_valid():
+                form.save(commit=False)
+                todo.user = request.user
+                form.save()
+                return redirect('home')
+        context = {
+                'form':form,
+                'todo':todo
+            }
+        return render(request,'todoapp/update.html',context)
+    except:
+        return HttpResponse('Todo item with the specified ID doesnot exist.')
+        
 
 def delete(request,id):
-
-    return render(request,'todoapp/delete.html',{})
+    try:
+        todo = Todo.objects.get(id=id)
+        todo.delete()
+        return redirect('home')
+    except:
+        return HttpResponse('Todo item with the specified ID doesnot exist.')
 
 def details(request,id):
-
-    return render(request,'todoapp/details.html',{})
+    try:
+        todo = Todo.objects.get(id=id)
+        return render(request,'todoapp/details.html',{'todo':todo})
+    except:
+        return redirect('/home')
 
 # def search(request):
 #     search_query = request.GET.get('search_query')
